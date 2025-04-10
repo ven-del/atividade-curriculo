@@ -29,7 +29,7 @@ body {
 }
 
 @media (max-width: 820px){
-    .wrapper {
+    .sheet {
         width: 95%;
         padding: 30px;
     }
