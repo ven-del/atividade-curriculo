@@ -235,6 +235,34 @@ section {
     margin-left: 40px;
 }
 
+.secret-section li {
+    margin-bottom: .2rem;
+}
+
+.secret-section img {
+    height: 10rem;
+    width: 15rem;
+    object-fit: cover;
+    border-radius: var(--border-radius-default);
+    margin-top: 1rem;
+    margin-bottom: 3rem;
+}
+
+.italic {
+    font-weight: 400;
+    font-style: italic;
+}
+
+.sqex {
+    font-weight: 900;
+    font-style: oblique;
+    text-decoration: double underline;
+}
+
+.centered {
+    text-align: center;
+}
+
 .button-close {
     margin-top: 15px;
     display: inline-block;
