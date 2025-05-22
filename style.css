@@ -212,7 +212,7 @@ section {
 .secret-section-content {
     background: var(--white);
     max-width: 600px;
-    max-height: 600px;
+    max-height: 400px;
     border-radius: var(--border-radius-default);
     box-sizing: border-box;
     overflow: hidden;
@@ -276,8 +276,8 @@ section {
 
 .secret-section img {
     height: 10rem;
-    width: 15rem;
-    object-fit: cover;
+    width: 10rem;
+    object-fit: fill;
     border-radius: var(--border-radius-default);
     margin-top: 1rem;
     margin-bottom: 3rem;
