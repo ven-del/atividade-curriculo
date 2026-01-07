@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currículo - Wendell Regis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    },
+                    screens: {
+                        'print': {'raw': 'print'},
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap');
+
+        /* Print specific overrides */
+        @media print {
+            @page { margin: 0; }
+            body { 
+                background: white !important; 
+                -webkit-print-color-adjust: exact; 
+            }
+            .no-print { display: none !important; }
+            .paper-shadow { 
+                box-shadow: none !important; 
+                border: none !important;
+                margin: 0 !important;
+                width: 100% !important;
+                max-width: none !important;
+                min-height: auto !important;
+            }
+            .dark .paper-content {
+                background-color: white !important;
+                color: black !important;
+            }
+            .dark .text-gray-300, .dark .text-gray-400 {
+                color: #4b5563 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-200 dark:bg-gray-900 transition-colors duration-300 min-h-screen flex flex-col items-center py-10 print:py-0 font-sans">
+
+    <!-- Control Bar -->
+    <nav class="no-print fixed top-0 left-0 w-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-md z-50 p-4 flex flex-wrap justify-between items-center transition-colors duration-300">
+        <div class="text-sm font-bold text-gray-700 dark:text-gray-200 uppercase tracking-widest">
+            <i class="fa-solid fa-id-card mr-2"></i> wendell_cv_v2
+        </div>
+        
+        <div class="flex gap-3 items-center">
+            <select id="langSelect" class="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="pt">🇧🇷 PT</option>
+                <option value="en">🇺🇸 EN</option>
+                <option value="es">🇪🇸 ES</option>
+            </select>
+
+            <button onclick="toggleModal()" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded text-sm font-medium transition-colors shadow-sm flex items-center gap-2">
+                <i class="fa-solid fa-user-secret"></i> <span data-key="btnSecret">Seção Secreta</span>
+            </button>
+
+            <button onclick="toggleTheme()" class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-yellow-400 p-2 rounded-full w-9 h-9 flex items-center justify-center transition-colors" title="Toggle Theme">
+                <i id="themeIcon" class="fa-solid fa-moon"></i>
+            </button>
+
+            <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded text-sm font-medium transition-colors shadow-sm flex items-center gap-2">
+                <i class="fa-solid fa-print"></i> <span data-key="btnPrint">PDF / Imprimir</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="h-16 w-full no-print"></div>
+
+    <!-- The Resume Paper -->
+    <div id="resume-paper" class="paper-content paper-shadow relative w-full max-w-[210mm] min-h-[297mm] bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100 p-[15mm] md:p-[20mm] shadow-2xl mx-auto transition-colors duration-300 print:shadow-none print:w-full">
+        
+        <!-- Resume Header -->
+        <header class="border-b-2 border-gray-800 dark:border-gray-200 pb-6 mb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+            <div>
+                <h1 class="text-3xl md:text-4xl font-bold font-serif tracking-tight uppercase mb-1" data-key="name">Wendell Regis</h1>
+                <h2 class="text-xl text-blue-600 dark:text-blue-400 font-medium" data-key="role">Desenvolvedor Full Stack</h2>
+            </div>
+            <div class="text-sm text-right md:text-right text-left space-y-1 text-gray-600 dark:text-gray-400">
+                <p><i class="fa-solid fa-envelope mr-2"></i> rwendell.regis@gmail.com</p>
+                <p><i class="fa-solid fa-phone mr-2"></i> +55 (85) 997-017-021</p>
+                <p><i class="fa-brands fa-linkedin mr-2"></i> linkedin.com/in/ven-del</p>
+                <p><i class="fa-brands fa-github mr-2"></i> github.com/ven-del</p>
+                <p><i class="fa-solid fa-location-dot mr-2"></i> Fortaleza, CE</p>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <!-- Left Column -->
+            <div class="md:col-span-2 space-y-6">
+                
+                <!-- Profile -->
+                <section>
+                    <h3 class="text-lg font-bold uppercase tracking-wider border-b border-gray-300 dark:border-gray-600 mb-3 pb-1" data-key="profileTitle">Perfil Profissional</h3>
+                    <p class="text-sm leading-relaxed text-justify text-gray-700 dark:text-gray-300" data-key="profileText">
+                        Desenvolvedor Full Stack com forte background em suporte a sistemas e gestão de TI. Experiência prática com React.js, Node.js, Python e Django. Histórico comprovado na resolução de incidentes críticos e gestão de acesso em grandes empresas (Accenture, Morphus), combinando habilidades técnicas de desenvolvimento com soft skills de comunicação e trabalho em equipe.
+                    </p>
+                </section>
+
+                <!-- Experience -->
+                <section>
+                    <h3 class="text-lg font-bold uppercase tracking-wider border-b border-gray-300 dark:border-gray-600 mb-4 pb-1" data-key="experienceTitle">Experiência Profissional</h3>
+                    
+                    <!-- Job 1 -->
+                    <div class="mb-4">
+                        <div class="flex justify-between items-baseline mb-1">
+                            <h4 class="font-bold text-gray-900 dark:text-white">Infinite Gold</h4>
+                            <span class="text-xs font-semibold bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded" data-key="date1">Jul 2025 (Projeto)</span>
+                        </div>
+                        <p class="italic text-sm text-blue-600 dark:text-blue-400 mb-2" data-key="job1">Jr Full Stack Web Developer</p>
+                        <ul class="list-disc list-outside ml-4 text-sm text-gray-700 dark:text-gray-300 space-y-1">
+                            <li data-key="job1desc1">Colaboração no código frontend e backend do projeto MyNumerologyMap.</li>
+                            <li data-key="job1desc2">Implementação de checkout e integração com provedores de pagamento online.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Job 2 -->
+                    <div class="mb-4">
+                        <div class="flex justify-between items-baseline mb-1">
+                            <h4 class="font-bold text-gray-900 dark:text-white">Accenture</h4>
+                            <span class="text-xs font-semibold bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded" data-key="date2">Fev 2022 - Fev 2024</span>
+                        </div>
+                        <p class="italic text-sm text-blue-600 dark:text-blue-400 mb-2" data-key="job2">Analista de Suporte a Sistemas</p>
+                        <ul class="list-disc list-outside ml-4 text-sm text-gray-700 dark:text-gray-300 space-y-1">
+                            <li data-key="job2desc1">Gestão de acesso a sistemas de vulnerabilidades e cyber resilience com milhares de ativos.</li>
+                            <li data-key="job2desc2">Proposição de melhorias sistêmicas e atuação como ticket manager em contato direto com clientes.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Job 3 (Shortened for space) -->
+                    <div class="mb-4">
+                        <div class="flex justify-between items-baseline mb-1">
+                            <h4 class="font-bold text-gray-900 dark:text-white">Morphus Seg. da Informação</h4>
+                            <span class="text-xs font-semibold bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded" data-key="date3">Jan 2021 - Fev 2022</span>
+                        </div>
+                        <p class="italic text-sm text-blue-600 dark:text-blue-400 mb-2" data-key="job3">Ticket Manager</p>
+                        <ul class="list-disc list-outside ml-4 text-sm text-gray-700 dark:text-gray-300 space-y-1">
+                            <li data-key="job3desc1">Ponto focal para clientes, resolução e escalonamento de demandas e relatórios em Power BI.</li>
+                        </ul>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- Right Column -->
+            <div class="md:col-span-1 space-y-6">
+                
+                <!-- Education -->
+                <section>
+                    <h3 class="text-lg font-bold uppercase tracking-wider border-b border-gray-300 dark:border-gray-600 mb-3 pb-1" data-key="educationTitle">Educação</h3>
+                    <div class="mb-3">
+                        <h4 class="font-bold text-sm" data-key="degree1">Desenvolvimento Full Stack</h4>
+                        <p class="text-xs text-gray-600 dark:text-gray-400">IEL - Geração Tech 2.0</p>
+                        <p class="text-xs text-gray-500">2025</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm" data-key="degree2">Análise e Desenv. de Sistemas</h4>
+                        <p class="text-xs text-gray-600 dark:text-gray-400">UNIFOR</p>
+                        <p class="text-xs text-gray-500">2017 - 2021</p>
+                    </div>
+                </section>
+
+                <!-- Skills -->
+                <section>
+                    <h3 class="text-lg font-bold uppercase tracking-wider border-b border-gray-300 dark:border-gray-600 mb-3 pb-1" data-key="skillsTitle">Habilidades</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 text-xs font-medium px-2.5 py-0.5 rounded">JavaScript / React.js</span>
+                        <span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 text-xs font-medium px-2.5 py-0.5 rounded">Node.js / Express</span>
+                        <span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 text-xs font-medium px-2.5 py-0.5 rounded">Python / Django</span>
+                        <span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 text-xs font-medium px-2.5 py-0.5 rounded">Git / GitHub</span>
+                        <span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 text-xs font-medium px-2.5 py-0.5 rounded">Scrum / Kanban</span>
+                        <span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 text-xs font-medium px-2.5 py-0.5 rounded">ITSM Tools</span>
+                    </div>
+                </section>
+
+                <!-- Languages -->
+                <section>
+                    <h3 class="text-lg font-bold uppercase tracking-wider border-b border-gray-300 dark:border-gray-600 mb-3 pb-1" data-key="languagesTitle">Idiomas</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span data-key="langPt">Português</span>
+                            <span class="text-gray-500 text-xs" data-key="native">Nativo</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
+                            <div class="bg-blue-600 h-1.5 rounded-full" style="width: 100%"></div>
+                        </div>
+
+                        <div class="flex justify-between mt-2">
+                            <span data-key="langEn">Inglês</span>
+                            <span class="text-gray-500 text-xs" data-key="fluent">Fluente (C2)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
+                            <div class="bg-blue-600 h-1.5 rounded-full" style="width: 100%"></div>
+                        </div>
+                        
+                        <div class="flex justify-between mt-2">
+                            <span data-key="langEs">Espanhol</span>
+                            <span class="text-gray-500 text-xs" data-key="advanced">Avançado (C1)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
+                            <div class="bg-blue-600 h-1.5 rounded-full" style="width: 85%"></div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+        
+        <div class="absolute bottom-4 left-0 w-full text-center text-[10px] text-gray-400 no-print">
+           Wendell Regis - CV
+        </div>
+    </div>
+
+    <!-- Secret Modal -->
+    <div id="secretModal" class="no-print fixed inset-0 bg-black/80 hidden items-center justify-center z-[100] p-4 backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-white dark:bg-gray-800 w-full max-w-lg rounded-lg shadow-2xl transform scale-95 transition-transform duration-300 border-2 border-purple-500 relative overflow-hidden">
+            
+            <div class="bg-purple-600 p-4 flex justify-between items-center text-white">
+                <h2 class="text-xl font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-user-astronaut"></i> <span data-key="modalTitle">Arquivo Confidencial</span>
+                </h2>
+                <button onclick="toggleModal()" class="hover:bg-purple-700 rounded p-1 transition-colors">
+                    <i class="fa-solid fa-xmark fa-lg"></i>
+                </button>
+            </div>
+
+            <div class="p-6 text-gray-800 dark:text-gray-200">
+                <div class="flex items-start gap-4 mb-6">
+                    <div class="text-4xl text-purple-500">
+                        <i class="fa-solid fa-code"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-1" data-key="hobbyTitle">Interesses Pessoais</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400" data-key="hobbyText">Entusiasta de novas tecnologias, segurança da informação e automação. Sempre explorando novas ferramentas e frameworks.</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4 mb-6">
+                    <div class="text-4xl text-purple-500">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-1" data-key="triviaTitle">Curiosidade</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400" data-key="triviaText">Fluente em três idiomas e autodidata em diversas tecnologias de programação antes mesmo da formação formal.</p>
+                    </div>
+                </div>
+
+                <div class="bg-yellow-100 dark:bg-yellow-900/30 border-l-4 border-yellow-500 p-4 rounded text-sm text-yellow-800 dark:text-yellow-200 italic">
+                    <i class="fa-solid fa-quote-left mr-2"></i>
+                    <span data-key="quote">"A tecnologia move o mundo."</span>
+                </div>
+            </div>
+
+            <div class="bg-gray-100 dark:bg-gray-900 p-4 text-right">
+                <button onclick="toggleModal()" class="px-4 py-2 bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 rounded text-sm font-semibold transition-colors text-gray-800 dark:text-white" data-key="btnClose">Fechar Arquivo</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            pt: {
+                btnSecret: "Seção Secreta",
+                btnPrint: "PDF / Imprimir",
+                name: "Wendell Regis",
+                role: "Desenvolvedor Full Stack",
+                profileTitle: "Perfil Profissional",
+                profileText: "Desenvolvedor Full Stack com forte background em suporte a sistemas e gestão de TI. Experiência prática com React.js, Node.js, Python e Django. Histórico comprovado na resolução de incidentes críticos e gestão de acesso em grandes empresas (Accenture, Morphus), combinando habilidades técnicas de desenvolvimento com soft skills de comunicação e trabalho em equipe.",
+                experienceTitle: "Experiência Profissional",
+                date1: "Jul 2025 (Projeto)",
+                job1: "Jr Full Stack Web Developer",
+                job1desc1: "Colaboração no código frontend e backend do projeto MyNumerologyMap.",
+                job1desc2: "Implementação de checkout e integração com provedores de pagamento online.",
+                date2: "Fev 2022 - Fev 2024",
+                job2: "Analista de Suporte a Sistemas",
+                job2desc1: "Gestão de acesso a sistemas de vulnerabilidades e cyber resilience com milhares de ativos.",
+                job2desc2: "Proposição de melhorias sistêmicas e atuação como ticket manager em contato direto com clientes.",
+                date3: "Jan 2021 - Fev 2022",
+                job3: "Ticket Manager",
+                job3desc1: "Ponto focal para clientes, resolução e escalonamento de demandas e relatórios em Power BI.",
+                educationTitle: "Educação",
+                degree1: "Desenvolvimento Full Stack",
+                degree2: "Análise e Desenv. de Sistemas",
+                skillsTitle: "Habilidades",
+                languagesTitle: "Idiomas",
+                langPt: "Português",
+                native: "Nativo",
+                langEn: "Inglês",
+                fluent: "Fluente (C2)",
+                langEs: "Espanhol",
+                advanced: "Avançado (C1)",
+                modalTitle: "Arquivo Confidencial",
+                hobbyTitle: "Interesses Pessoais",
+                hobbyText: "Entusiasta de novas tecnologias, segurança da informação e automação. Sempre explorando novas ferramentas e frameworks.",
+                triviaTitle: "Curiosidade",
+                triviaText: "Fluente em três idiomas e autodidata em diversas tecnologias de programação antes mesmo da formação formal.",
+                quote: "\"A tecnologia move o mundo.\"",
+                btnClose: "Fechar Arquivo"
+            },
+            en: {
+                btnSecret: "Secret Section",
+                btnPrint: "PDF / Print",
+                name: "Wendell Regis",
+                role: "Full Stack Developer",
+                profileTitle: "Professional Profile",
+                profileText: "Full Stack Developer with a strong background in system support and IT management. Practical experience with React.js, Node.js, Python, and Django. Proven track record in resolving critical incidents and access management in large companies (Accenture, Morphus), combining technical development skills with communication and teamwork soft skills.",
+                experienceTitle: "Work Experience",
+                date1: "Jul 2025 (Project)",
+                job1: "Jr Full Stack Web Developer",
+                job1desc1: "Collaboration on frontend and backend code for the MyNumerologyMap project.",
+                job1desc2: "Implementation of checkout and integration with online payment providers.",
+                date2: "Feb 2022 - Feb 2024",
+                job2: "System Support Analyst",
+                job2desc1: "Access management for vulnerability and cyber resilience systems with thousands of assets.",
+                job2desc2: "Proposed systemic improvements and acted as ticket manager with direct client contact.",
+                date3: "Jan 2021 - Feb 2022",
+                job3: "Ticket Manager",
+                job3desc1: "Focal point for clients, resolution/escalation of demands, and Power BI reporting.",
+                educationTitle: "Education",
+                degree1: "Full Stack Development",
+                degree2: "Analysis and Sys. Dev.",
+                skillsTitle: "Skills",
+                languagesTitle: "Languages",
+                langPt: "Portuguese",
+                native: "Native",
+                langEn: "English",
+                fluent: "Fluent (C2)",
+                langEs: "Spanish",
+                advanced: "Advanced (C1)",
+                modalTitle: "Confidential File",
+                hobbyTitle: "Personal Interests",
+                hobbyText: "Enthusiast of new technologies, information security, and automation. Always exploring new tools and frameworks.",
+                triviaTitle: "Trivia",
+                triviaText: "Fluent in three languages and self-taught in various programming technologies even before formal education.",
+                quote: "\"Technology moves the world.\"",
+                btnClose: "Close File"
+            },
+            es: {
+                btnSecret: "Sección Secreta",
+                btnPrint: "PDF / Imprimir",
+                name: "Wendell Regis",
+                role: "Desarrollador Full Stack",
+                profileTitle: "Perfil Profesional",
+                profileText: "Desarrollador Full Stack con sólida experiencia en soporte de sistemas y gestión de TI. Experiencia práctica con React.js, Node.js, Python y Django. Historial comprobado en la resolución de incidentes críticos y gestión de accesos en grandes empresas (Accenture, Morphus), combinando habilidades técnicas con habilidades blandas de comunicación y trabajo en equipo.",
+                experienceTitle: "Experiencia Laboral",
+                date1: "Jul 2025 (Proyecto)",
+                job1: "Desarrollador Web Full Stack Jr",
+                job1desc1: "Colaboración en código frontend y backend del proyecto MyNumerologyMap.",
+                job1desc2: "Implementación de checkout e integración con proveedores de pago en línea.",
+                date2: "Feb 2022 - Feb 2024",
+                job2: "Analista de Soporte de Sistemas",
+                job2desc1: "Gestión de accesos a sistemas de vulnerabilidades y ciberresiliencia con miles de activos.",
+                job2desc2: "Propuesta de mejoras sistémicas y actuación como ticket manager en contacto directo con clientes.",
+                date3: "Ene 2021 - Feb 2022",
+                job3: "Ticket Manager",
+                job3desc1: "Punto focal para clientes, resolución y escalamiento de demandas e informes en Power BI.",
+                educationTitle: "Educación",
+                degree1: "Desarrollo Full Stack",
+                degree2: "Análisis y Desarr. de Sist.",
+                skillsTitle: "Habilidades",
+                languagesTitle: "Idiomas",
+                langPt: "Portugués",
+                native: "Nativo",
+                langEn: "Inglés",
+                fluent: "Fluido (C2)",
+                langEs: "Español",
+                advanced: "Avanzado (C1)",
+                modalTitle: "Archivo Confidencial",
+                hobbyTitle: "Intereses Personales",
+                hobbyText: "Entusiasta de nuevas tecnologías, seguridad de la información y automatización. Siempre explorando nuevas herramientas y frameworks.",
+                triviaTitle: "Curiosidad",
+                triviaText: "Fluido en tres idiomas y autodidacta en varias tecnologías de programación antes de la educación formal.",
+                quote: "\"La tecnología mueve el mundo.\"",
+                btnClose: "Cerrar Archivo"
+            }
+        };
+
+        let currentLang = 'pt';
+        let isDark = false;
+
+        const modal = document.getElementById('secretModal');
+        const modalContent = modal.querySelector('div');
+        const htmlElement = document.documentElement;
+        const themeIcon = document.getElementById('themeIcon');
+        const langSelect = document.getElementById('langSelect');
+
+        function updateContent() {
+            const t = translations[currentLang];
+            document.querySelectorAll('[data-key]').forEach(element => {
+                const key = element.getAttribute('data-key');
+                if (t[key]) {
+                    element.textContent = t[key];
+                }
+            });
+            document.title = `Currículo - ${t.name}`;
+        }
+
+        function toggleTheme() {
+            isDark = !isDark;
+            if (isDark) {
+                htmlElement.classList.add('dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                htmlElement.classList.remove('dark');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        }
+
+        function toggleModal() {
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    modalContent.classList.remove('scale-95');
+                    modalContent.classList.add('scale-100');
+                }, 10);
+            } else {
+                modal.classList.add('opacity-0');
+                modalContent.classList.remove('scale-100');
+                modalContent.classList.add('scale-95');
+                setTimeout(() => {
+                    modal.classList.remove('flex');
+                    modal.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        langSelect.addEventListener('change', (e) => {
+            currentLang = e.target.value;
+            updateContent();
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                toggleModal();
+            }
+        });
+
+        updateContent();
+    </script>
+</body>
+</html>

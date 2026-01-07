@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Teste de Integração C#</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .card { 
+            border: 1px solid #ccc; 
+            padding: 15px; 
+            margin-bottom: 10px; 
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        button { 
+            padding: 10px 20px; 
+            background-color: #0078d4; 
+            color: white; 
+            border: none; 
+            cursor: pointer; 
+            font-size: 16px;
+        }
+        button:hover { background-color: #005a9e; }
+    </style>
+</head>
+<body>
+
+    <h1>Meu Currículo (Backend C#)</h1>
+    <button onclick="carregarCurriculo()">Carregar Experiências</button>
+    
+    <div id="lista" style="margin-top: 20px;"></div>
+
+    <script>
+        async function carregarCurriculo() {
+            const divLista = document.getElementById('lista');
+            divLista.innerHTML = "Carregando...";
+
+            try {
+                // ATENÇÃO: Confirme se a porta é 5000 mesmo (veja no seu terminal do C#)
+                const response = await fetch('http://localhost:5000/api/Curriculo');
+                
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status}`);
+                }
+
+                const dados = await response.json();
+                
+                divLista.innerHTML = ""; // Limpa o "Carregando..."
+
+                dados.forEach(exp => {
+                    divLista.innerHTML += `
+                        <div class="card">
+                            <h3>${exp.cargo} na ${exp.empresa}</h3>
+                            <p><strong>Período:</strong> ${exp.dataInicio} até ${exp.dataFim ? exp.dataFim : "Atualmente"}</p>
+                            <p>${exp.descricao}</p>
+                        </div>
+                    `;
+                });
+
+            } catch (error) {
+                console.error(error);
+                divLista.innerHTML = `<p style="color:red">Erro ao conectar: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
