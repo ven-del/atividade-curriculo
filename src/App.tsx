@@ -88,7 +88,7 @@ function App() {
   if (!curriculo) return null
 
   return (
-    <div className="min-h-screen bg-gray-200 dark:bg-gray-900 transition-colors duration-300 flex flex-col items-center py-10 print:py-0 print:bg-white font-sans">
+    <div className=" bg-gray-200 dark:bg-gray-900 transition-colors duration-300 flex flex-col items-center py-10 print:py-0 print:bg-white font-sans">
       
       {/* Control Bar - No Print */}
       <ControlBar 
@@ -101,7 +101,7 @@ function App() {
       <div className="h-16 w-full no-print"></div>
 
       {/* Resume Paper */}
-      <div className="resume-paper relative w-full max-w-[210mm] min-h-[297mm] bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100 p-[15mm] md:p-[20mm] shadow-2xl mx-auto transition-colors duration-300 print:shadow-none print:w-full print:max-w-none print:bg-white print:text-gray-800">
+      <div className="resume-paper relative w-full max-w-[210mm]  bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100 p-[15mm] md:p-[20mm] shadow-2xl mx-auto transition-colors duration-300 print:shadow-none print:w-full print:max-w-none print:bg-white print:text-gray-800">
         
         {/* Resume Header */}
         <ResumeHeader 
@@ -111,20 +111,21 @@ function App() {
           contato={curriculo.contato}
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 print:grid-cols-3 gap-8 print:gap-6 items-start">
           
           {/* Left Column */}
-          <div className="md:col-span-2 space-y-6">
+          <div className="md:col-span-2 print:col-span-2 space-y-6 print:space-y-3">
             <ProfileSection perfil={curriculo.perfil} />
             <ExperienceSection experiencias={curriculo.experiencias} />
-            <SkillsSection habilidades={curriculo.habilidades} />
           </div>
 
           {/* Right Column */}
-          <div className="md:col-span-1 space-y-6">
+          <div className="md:col-span-1 print:col-span-1 space-y-6 print:space-y-3">
             <EducationSection educacao={curriculo.educacao} />
             <Separator className="print:bg-gray-300" />
             <LanguagesSection idiomas={curriculo.idiomas} />
+            <Separator className="print:bg-gray-300" />
+            <SkillsSection habilidades={curriculo.habilidades} />
             <Separator className="print:bg-gray-300" />
             <ProjectsSection />
           </div>

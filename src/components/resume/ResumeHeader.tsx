@@ -10,13 +10,13 @@ interface ResumeHeaderProps {
 
 export function ResumeHeader({ nome, titulo, fotoUrl, contato }: ResumeHeaderProps) {
   return (
-    <header className="border-b-2 border-gray-800 dark:border-gray-200 print:border-gray-800 pb-6 mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <header className="border-b-2 border-gray-800 dark:border-gray-200 print:border-gray-800 pb-6 mb-6 flex flex-col md:flex-row print:flex-row justify-between items-start md:items-center print:items-center gap-4">
       <div className="flex items-center gap-4">
         {fotoUrl && (
           <img 
             src={fotoUrl} 
             alt={`Foto de ${nome}`}
-            className="w-20 h-20 rounded-full object-cover border-2 border-gray-300 dark:border-gray-600 print:border-gray-300"
+            className="w-20 h-20 rounded-full object-cover border-2 border-gray-300 dark:border-gray-600 print:hidden"
           />
         )}
         <div>

@@ -6,14 +6,16 @@
 /* Print specific styles */
 @media print {
   @page {
-    margin: 0;
+    margin: 8mm;
     size: A4;
   }
   
-  body {
+  html, body {
     background: white !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+    margin: 0;
+    padding: 0;
   }
   
   .no-print {
@@ -24,11 +26,59 @@
     box-shadow: none !important;
     border: none !important;
     margin: 0 !important;
+    padding: 15mm !important;
     width: 100% !important;
     max-width: none !important;
-    min-height: auto !important;
+    min-height: unset !important;
+    height: auto !important;
     background-color: white !important;
     color: #1f2937 !important;
+  }
+  
+  /* Force grid layout on print */
+  .grid.md\:grid-cols-3,
+  .grid.print\:grid-cols-3 {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 1.5rem !important;
+    align-items: start !important;
+  }
+  
+  .md\:col-span-2,
+  .print\:col-span-2 {
+    grid-column: span 2 / span 2 !important;
+  }
+  
+  .md\:col-span-1,
+  .print\:col-span-1 {
+    grid-column: span 1 / span 1 !important;
+  }
+  
+  /* Remove extra spacing between sections on print */
+  .space-y-6 > * + * {
+    margin-top: 0.75rem !important;
+  }
+  
+  /* Remove any flex-grow that might stretch columns */
+  .md\:col-span-2 > *,
+  .md\:col-span-1 > *,
+  .print\:col-span-2 > *,
+  .print\:col-span-1 > * {
+    flex-grow: 0 !important;
+  }
+  
+  /* Force flex row on print for header */
+  .md\:flex-row {
+    flex-direction: row !important;
+  }
+  
+  .md\:items-center {
+    align-items: center !important;
+  }
+  
+  /* Ensure proper page breaks */
+  section {
+    page-break-inside: avoid;
   }
   
   /* Force light mode colors on print */
@@ -51,6 +101,12 @@
   .dark .resume-paper .border-gray-200,
   .dark .resume-paper .border-gray-600 {
     border-color: #1f2937 !important;
+  }
+  
+  /* Badge colors for print */
+  .dark .resume-paper .bg-blue-900 {
+    background-color: #dbeafe !important;
+    color: #1e40af !important;
   }
 }
 
