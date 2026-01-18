@@ -12,8 +12,9 @@ import {
   LanguagesSection,
   ProjectsSection
 } from '@/components/resume'
-import { montarCurriculo, type DadosApi } from '@/data/mockData'
+import { montarCurriculo, type DadosApi } from '@/data/data'
 import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext'
+import { getTranslations } from '@/lib/translations'
 import type { 
   Curriculo, 
   ExperienciaApi, 
@@ -24,7 +25,7 @@ import type {
   EducacaoApi 
 } from '@/types/curriculo'
 
-const API_BASE_URL = 'http://localhost:8080/api'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api'
 
 function ResumeContent() {
   const [curriculo, setCurriculo] = useState<Curriculo | null>(null)
@@ -37,6 +38,12 @@ function ResumeContent() {
   useEffect(() => {
     carregarDadosApi()
   }, [])
+
+  // Atualiza o título da página quando o idioma muda
+  useEffect(() => {
+    const t = getTranslations(language)
+    document.title = t.pageTitle
+  }, [language])
 
   // Remonta o currículo quando o idioma muda
   useEffect(() => {
@@ -164,7 +171,7 @@ function ResumeContent() {
       <div className="h-16 w-full no-print"></div>
 
       {/* Resume Paper */}
-      <div className="resume-paper relative w-full max-w-[210mm]  bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100 p-[15mm] md:p-[20mm] shadow-2xl mx-auto transition-colors duration-300 print:shadow-none print:w-full print:max-w-none print:bg-white print:text-gray-800">
+      <div className="resume-paper relative w-full max-w-[210mm]  bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100 px-12.5 py-[15mm] md:py-[20mm] shadow-2xl mx-auto transition-colors duration-300 print:shadow-none print:w-full print:max-w-none print:bg-white print:text-gray-800 print:p-[13mm]">
         
         {/* Resume Header */}
         <ResumeHeader 
@@ -174,22 +181,22 @@ function ResumeContent() {
           contato={curriculo.contato}
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 print:grid-cols-3 gap-8 print:gap-6 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-3 print:grid-cols-1 gap-8 print:gap-4 items-start">
           
           {/* Left Column */}
-          <div className="md:col-span-2 print:col-span-2 space-y-6 print:space-y-3">
+          <div className="md:col-span-2 print:col-span-1 space-y-6 print:space-y-4">
             <ProfileSection perfil={curriculo.perfil} />
             <ExperienceSection experiencias={curriculo.experiencias} />
           </div>
 
           {/* Right Column */}
-          <div className="md:col-span-1 print:col-span-1 space-y-6 print:space-y-3">
+          <div className="md:col-span-1 print:col-span-1 space-y-6 print:space-y-4">
             <EducationSection educacao={curriculo.educacao} />
-            <Separator className="print:bg-gray-300" />
-            <LanguagesSection idiomas={curriculo.idiomas} />
-            <Separator className="print:bg-gray-300" />
+            <Separator className="print:hidden" />
             <SkillsSection habilidades={curriculo.habilidades} />
-            <Separator className="print:bg-gray-300" />
+            <Separator className="print:hidden" />
+            <LanguagesSection idiomas={curriculo.idiomas} />
+            <Separator className="print:hidden" />
             <ProjectsSection />
           </div>
         </div>

@@ -6,11 +6,12 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { useLanguage, type Language } from "@/contexts/LanguageContext"
+import { BR, US, ES } from 'country-flag-icons/react/3x2'
 
 const languages = [
-  { value: 'pt-br', label: 'Pt-Br', flag: '\u{1F1E7}\u{1F1F7}' },
-  { value: 'en', label: 'En', flag: '\u{1F1FA}\u{1F1F8}' },
-  { value: 'es', label: 'Es', flag: '\u{1F1EA}\u{1F1F8}' },
+  { value: 'pt-br', label: 'Português', Flag: BR },
+  { value: 'en', label: 'English', Flag: US },
+  { value: 'es', label: 'Español', Flag: ES },
 ] as const
 
 export function LanguageSelector() {
@@ -18,14 +19,14 @@ export function LanguageSelector() {
 
   return (
     <Select value={language} onValueChange={(value) => setLanguage(value as Language)}>
-      <SelectTrigger className="w-27.5 rounded-full bg-background dark:bg-input/30">
+      <SelectTrigger className="w-36 rounded-full bg-background dark:bg-input/30">
         <SelectValue placeholder="Idioma" />
       </SelectTrigger>
       <SelectContent>
         {languages.map((lang) => (
           <SelectItem key={lang.value} value={lang.value}>
             <span className="flex items-center gap-2">
-              <span>{lang.flag}</span>
+              <lang.Flag className="w-5 h-4" />
               <span>{lang.label}</span>
             </span>
           </SelectItem>

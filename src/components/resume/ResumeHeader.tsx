@@ -10,7 +10,7 @@ interface ResumeHeaderProps {
 
 export function ResumeHeader({ nome, titulo, fotoUrl, contato }: ResumeHeaderProps) {
   return (
-    <header className="border-b-2 border-gray-800 dark:border-gray-200 print:border-gray-800 pb-6 mb-6 flex flex-col md:flex-row print:flex-row justify-between items-start md:items-center print:items-center gap-4">
+    <header className="border-b-2 border-gray-800 dark:border-gray-200 print:border-gray-800 pb-6 mb-6 flex flex-col md:flex-row print:flex-row justify-between items-start md:items-center print:items-start gap-4 print:gap-2">
       <div className="flex items-center gap-4">
         {fotoUrl && (
           <img 
@@ -20,29 +20,29 @@ export function ResumeHeader({ nome, titulo, fotoUrl, contato }: ResumeHeaderPro
           />
         )}
         <div>
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight uppercase mb-1 print:text-gray-800">
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight uppercase mb-1 print:text-gray-900 print:text-2xl">
             {nome}
           </h1>
-          <h2 className="text-xl text-blue-600 dark:text-blue-400 print:text-blue-600 font-medium">
+          <h2 className="text-xl text-blue-600 dark:text-blue-400 print:text-gray-800 font-medium print:text-base print:font-semibold">
             {titulo}
           </h2>
         </div>
       </div>
-      <div className="text-sm text-right space-y-1 text-gray-600 dark:text-gray-400 print:text-gray-600">
+      <div className="text-sm text-right print:text-right space-y-1 text-gray-600 dark:text-gray-400 print:text-gray-800 print:space-y-0.5">
         <p className="flex items-center justify-end gap-2">
-          <Mail className="w-3 h-3" /> {contato.email}
+          <Mail className="w-3 h-3 print:hidden" /> {contato.email}
         </p>
         <p className="flex items-center justify-end gap-2">
-          <Phone className="w-3 h-3" /> {contato.telefone}
+          <Phone className="w-3 h-3 print:hidden" /> {contato.telefone}
         </p>
         <p className="flex items-center justify-end gap-2">
-          <Linkedin className="w-3 h-3" /> <a href={contato.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 dark:hover:text-blue-400 print:text-gray-600">linkedin.com/in/{contato.linkedin.replace('https://linkedin.com/in/', '')}</a>
+          <Linkedin className="w-3 h-3 print:hidden" /> <a href={contato.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 dark:hover:text-blue-400 print:text-gray-800">linkedin.com/in/{contato.linkedin.replace('https://linkedin.com/in/', '')}</a>
         </p>
         <p className="flex items-center justify-end gap-2">
-          <Github className="w-3 h-3" /> <a href={contato.github} target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 dark:hover:text-blue-400 print:text-gray-600">github.com/{contato.github.replace('https://github.com/', '')}</a>
+          <Github className="w-3 h-3 print:hidden" /> <a href={contato.github} target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 dark:hover:text-blue-400 print:text-gray-800">github.com/{contato.github.replace('https://github.com/', '')}</a>
         </p>
         <p className="flex items-center justify-end gap-2">
-          <MapPin className="w-3 h-3" /> {contato.localizacao}
+          <MapPin className="w-3 h-3 print:hidden" /> {contato.localizacao}
         </p>
       </div>
     </header>

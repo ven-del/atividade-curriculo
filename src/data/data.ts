@@ -200,12 +200,14 @@ export function montarCurriculo(dados: DadosApi, language: Language = 'pt-br'): 
     ...converterSoftskills(softskills, language)
   ]
 
+  const contato = montarContato(informacoesPessoais)
+
   return {
     nome: informacoesPessoais?.nomeCompleto ?? mockDadosBase.nome,
     titulo: obterProfissaoTraduzida(informacoesPessoais, language),
     fotoUrl: mockDadosBase.fotoUrl,
     perfil: obterDescricaoTraduzida(informacoesPessoais, language),
-    contato: montarContato(informacoesPessoais),
+    contato,
     experiencias: experiencias.map((exp) => ({
       id: exp.id,
       cargo: language === 'en' ? exp.cargoEn : language === 'es' ? exp.cargoEs : exp.cargo,
