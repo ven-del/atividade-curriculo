@@ -9,42 +9,67 @@ import type {
   InformacaoPessoalApi,
   HardskillApi,
   SoftskillApi,
-  CuriosidadeApi
+  CuriosidadeApi,
+  EducacaoApi
 } from '@/types/curriculo'
 import type { Language } from '@/contexts/LanguageContext'
 
 // Dados mockados para informações que ainda não existem no backend
-// Educação e idiomas continuam mockados
+// Idiomas continua mockado
 
-export const mockEducacao: Educacao[] = [
-  {
-    id: 1,
-    instituicao: 'IEL - Geração Tech 2.0',
-    curso: 'Desenvolvimento Full Stack',
-    dataInicio: 'Mar. 2025',
-    dataFim: 'Jun. 2025'
+interface IdiomaRaw {
+  id: number
+  nome: string
+  nomeEn: string
+  nomeEs: string
+  nivel: string
+  nivelEn: string
+  nivelEs: string
+  porcentagem: number
+}
+
+const idiomasRaw: IdiomaRaw[] = [
+  { 
+    id: 1, 
+    nome: 'Português', 
+    nomeEn: 'Portuguese', 
+    nomeEs: 'Portugués',
+    nivel: 'Nativo', 
+    nivelEn: 'Native',
+    nivelEs: 'Nativo',
+    porcentagem: 100 
   },
-  {
-    id: 2,
-    instituicao: 'Alura',
-    curso: 'Formação Python Web Development',
-    dataInicio: 'Mar. 2022',
-    dataFim: 'Ago. 2022'
+  { 
+    id: 2, 
+    nome: 'Inglês', 
+    nomeEn: 'English', 
+    nomeEs: 'Inglés',
+    nivel: 'Fluente (C2)', 
+    nivelEn: 'Fluent (C2)',
+    nivelEs: 'Fluido (C2)',
+    porcentagem: 100 
   },
-  {
-    id: 3,
-    instituicao: 'UNIFOR',
-    curso: 'Análise e Desenvolvimento de Sistemas',
-    dataInicio: 'Ago. 2017',
-    dataFim: 'Jun. 2021'
+  { 
+    id: 3, 
+    nome: 'Espanhol', 
+    nomeEn: 'Spanish', 
+    nomeEs: 'Español',
+    nivel: 'Avançado (C1)', 
+    nivelEn: 'Advanced (C1)',
+    nivelEs: 'Avanzado (C1)',
+    porcentagem: 85 
   }
 ]
 
-export const mockIdiomas: Idioma[] = [
-  { id: 1, nome: 'Português', nivel: 'Nativo', porcentagem: 100 },
-  { id: 2, nome: 'Inglês', nivel: 'Fluente (C2)', porcentagem: 100 },
-  { id: 3, nome: 'Espanhol', nivel: 'Avançado (C1)', porcentagem: 85 }
-]
+// Função para converter idiomas mockados baseado no idioma selecionado
+function converterIdiomas(language: Language): Idioma[] {
+  return idiomasRaw.map(i => ({
+    id: i.id,
+    nome: language === 'en' ? i.nomeEn : language === 'es' ? i.nomeEs : i.nome,
+    nivel: language === 'en' ? i.nivelEn : language === 'es' ? i.nivelEs : i.nivel,
+    porcentagem: i.porcentagem
+  }))
+}
 
 export const mockPerfil = `Olá! Me chamo Wendell e sou apaixonado por tecnologia, jogos e programação. Nasci e cresci em Fortaleza, já trabalhei diretamente com o público antes de entrar na área da tecnologia, sendo líder de uma pequena equipe. Já como parte da TI, possuo 5 anos de experiência profissional como analista de sistemas, sendo os últimos dois diretamente como suporte. Também tive meu período de estágio no início de minha jornada na TI, onde atuei como help desk e fiz parte de um time de infraestrutura durante o ano de experiência. Amo aprender mais sobre programação e atualmente sou um aluno orgulhoso do Geração Tech 2.0.`
 
@@ -69,6 +94,7 @@ export interface DadosApi {
   hardskills: HardskillApi[]
   softskills: SoftskillApi[]
   curiosidades: CuriosidadeApi[]
+  educacoes: EducacaoApi[]
 }
 
 // Função para converter hardskills da API para o formato interno
@@ -89,22 +115,33 @@ function converterSoftskills(softskills: SoftskillApi[], language: Language): Ha
   }))
 }
 
+// Função para converter educações da API para o formato interno
+function converterEducacoes(educacoes: EducacaoApi[], language: Language): Educacao[] {
+  return educacoes.map(e => ({
+    id: e.id,
+    instituicao: e.instituicao,
+    curso: language === 'en' ? e.cursoEn : language === 'es' ? e.cursoEs : e.curso,
+    dataInicio: e.dataInicio,
+    dataFim: e.dataFim
+  }))
+}
+
 // Função para montar contato a partir das informações pessoais
 function montarContato(info: InformacaoPessoalApi | null): Contato {
   if (!info) {
     return {
       email: 'rwendell.regis@gmail.com',
       telefone: '+55 (85) 997-017-021',
-      linkedin: 'linkedin.com/in/ven-del',
-      github: 'github.com/ven-del',
+      linkedin: 'https://linkedin.com/in/ven-del',
+      github: 'https://github.com/ven-del',
       localizacao: 'Fortaleza, CE'
     }
   }
   return {
     email: info.email,
     telefone: info.telefone,
-    linkedin: info.linkLinkedin.replace('https://', ''),
-    github: info.linkGitHub.replace('https://', ''),
+    linkedin: info.linkLinkedin,
+    github: info.linkGitHub,
     localizacao: info.localizacao
   }
 }
@@ -155,7 +192,7 @@ function obterDescricaoTraduzida(info: InformacaoPessoalApi | null, language: La
 
 // Função para montar o currículo completo mesclando dados da API com mock
 export function montarCurriculo(dados: DadosApi, language: Language = 'pt-br'): Curriculo {
-  const { experiencias, informacoesPessoais, hardskills, softskills, curiosidades } = dados
+  const { experiencias, informacoesPessoais, hardskills, softskills, curiosidades, educacoes } = dados
   
   // Mescla hardskills e softskills
   const habilidadesConvertidas: Habilidade[] = [
@@ -177,9 +214,9 @@ export function montarCurriculo(dados: DadosApi, language: Language = 'pt-br'): 
       dataFim: exp.dataFim,
       descricao: language === 'en' ? exp.descricaoEn : language === 'es' ? exp.descricaoEs : exp.descricao
     })),
-    educacao: mockEducacao,
+    educacao: converterEducacoes(educacoes, language),
     habilidades: habilidadesConvertidas,
-    idiomas: mockIdiomas,
+    idiomas: converterIdiomas(language),
     secaoSecreta: montarSecaoSecreta(curiosidades, language)
   }
 }

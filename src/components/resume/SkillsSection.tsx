@@ -1,18 +1,22 @@
 import { Badge } from "@/components/ui/badge"
 import type { Habilidade } from '@/types/curriculo'
+import { useLanguage } from '@/contexts/LanguageContext'
+import { getTranslations } from '@/lib/translations'
 
 interface SkillsSectionProps {
   habilidades: Habilidade[]
 }
 
 export function SkillsSection({ habilidades }: SkillsSectionProps) {
+  const { language } = useLanguage()
+  const t = getTranslations(language)
   const hardskills = habilidades.filter(h => h.categoria === 'hard')
   const softskills = habilidades.filter(h => h.categoria === 'soft')
 
   return (
     <section>
       <h3 className="text-lg font-bold uppercase tracking-wider border-b border-gray-300 dark:border-gray-600 print:border-gray-300 mb-3 pb-1 print:text-gray-800">
-        Habilidades
+        {t.skills}
       </h3>
       <div className="space-y-4">
         {/* Hardskills */}

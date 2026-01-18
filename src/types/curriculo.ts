@@ -51,6 +51,16 @@ export interface CuriosidadeApi {
   descricaoEs: string
 }
 
+export interface EducacaoApi {
+  id: number
+  curso: string
+  cursoEn: string
+  cursoEs: string
+  instituicao: string
+  dataInicio: string
+  dataFim: string | null
+}
+
 // === Tipos usados internamente no front ===
 export interface Experiencia {
   id: number

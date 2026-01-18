@@ -1,14 +1,19 @@
 import type { Educacao } from '@/types/curriculo'
+import { useLanguage } from '@/contexts/LanguageContext'
+import { getTranslations } from '@/lib/translations'
 
 interface EducationSectionProps {
   educacao: Educacao[]
 }
 
 export function EducationSection({ educacao }: EducationSectionProps) {
+  const { language } = useLanguage()
+  const t = getTranslations(language)
+
   return (
     <section>
       <h3 className="text-lg font-bold uppercase tracking-wider border-b border-gray-300 dark:border-gray-600 print:border-gray-300 mb-3 pb-1 print:text-gray-800">
-        Educação
+        {t.education}
       </h3>
       {educacao.map((edu) => (
         <div key={edu.id} className="mb-3">

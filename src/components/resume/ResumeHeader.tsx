@@ -36,10 +36,10 @@ export function ResumeHeader({ nome, titulo, fotoUrl, contato }: ResumeHeaderPro
           <Phone className="w-3 h-3" /> {contato.telefone}
         </p>
         <p className="flex items-center justify-end gap-2">
-          <Linkedin className="w-3 h-3" /> {contato.linkedin}
+          <Linkedin className="w-3 h-3" /> <a href={contato.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 dark:hover:text-blue-400 print:text-gray-600">linkedin.com/in/{contato.linkedin.replace('https://linkedin.com/in/', '')}</a>
         </p>
         <p className="flex items-center justify-end gap-2">
-          <Github className="w-3 h-3" /> {contato.github}
+          <Github className="w-3 h-3" /> <a href={contato.github} target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 dark:hover:text-blue-400 print:text-gray-600">github.com/{contato.github.replace('https://github.com/', '')}</a>
         </p>
         <p className="flex items-center justify-end gap-2">
           <MapPin className="w-3 h-3" /> {contato.localizacao}

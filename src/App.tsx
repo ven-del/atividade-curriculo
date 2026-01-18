@@ -20,7 +20,8 @@ import type {
   InformacaoPessoalApi, 
   HardskillApi, 
   SoftskillApi, 
-  CuriosidadeApi 
+  CuriosidadeApi,
+  EducacaoApi 
 } from '@/types/curriculo'
 
 const API_BASE_URL = 'http://localhost:8080/api'
@@ -56,13 +57,15 @@ function ResumeContent() {
         informacoesRes,
         hardskillsRes,
         softskillsRes,
-        curiosidadesRes
+        curiosidadesRes,
+        educacoesRes
       ] = await Promise.all([
         fetch(`${API_BASE_URL}/Experiencias`),
         fetch(`${API_BASE_URL}/InformacoesPessoais`),
         fetch(`${API_BASE_URL}/Hardskills`),
         fetch(`${API_BASE_URL}/Softskills`),
-        fetch(`${API_BASE_URL}/Curiosidades`)
+        fetch(`${API_BASE_URL}/Curiosidades`),
+        fetch(`${API_BASE_URL}/Educacoes`)
       ])
 
       // Verifica se as respostas principais foram bem-sucedidas
@@ -84,6 +87,9 @@ function ResumeContent() {
       const curiosidades: CuriosidadeApi[] = curiosidadesRes.ok 
         ? await curiosidadesRes.json() 
         : []
+      const educacoes: EducacaoApi[] = educacoesRes.ok 
+        ? await educacoesRes.json() 
+        : []
 
       // Agrupa todos os dados da API
       const dados: DadosApi = {
@@ -91,7 +97,8 @@ function ResumeContent() {
         informacoesPessoais,
         hardskills,
         softskills,
-        curiosidades
+        curiosidades,
+        educacoes
       }
       
       // Salva os dados da API e monta o currículo
@@ -185,11 +192,6 @@ function ResumeContent() {
             <Separator className="print:bg-gray-300" />
             <ProjectsSection />
           </div>
-        </div>
-        
-        {/* Footer watermark - no print */}
-        <div className="absolute bottom-4 left-0 w-full text-center text-[10px] text-gray-400 no-print">
-          Wendell Pereira - CV
         </div>
       </div>
 
