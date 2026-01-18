@@ -59,6 +59,10 @@
     margin-top: 0.75rem !important;
   }
   
+  .print\:space-y-3 > * + * {
+    margin-top: 0.5rem !important;
+  }
+  
   /* Remove any flex-grow that might stretch columns */
   .md\:col-span-2 > *,
   .md\:col-span-1 > *,
@@ -76,11 +80,25 @@
     align-items: center !important;
   }
   
-  /* Ensure proper page breaks */
+  /* Allow page breaks inside sections to avoid large gaps */
   section {
-    page-break-inside: avoid;
+    page-break-inside: auto !important;
+    break-inside: auto !important;
   }
   
+  /* Avoid orphan headers - keep headers with at least some content */
+  section h3,
+  section h4 {
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+  
+  /* Avoid breaking inside individual experience/education items when possible */
+  section > div {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
   /* Force light mode colors on print */
   .dark .resume-paper,
   .dark .resume-paper * {

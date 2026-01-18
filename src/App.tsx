@@ -12,35 +12,91 @@ import {
   LanguagesSection,
   ProjectsSection
 } from '@/components/resume'
-import { montarCurriculo } from '@/data/mockData'
-import type { Curriculo } from '@/types/curriculo'
+import { montarCurriculo, type DadosApi } from '@/data/mockData'
+import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext'
+import type { 
+  Curriculo, 
+  ExperienciaApi, 
+  InformacaoPessoalApi, 
+  HardskillApi, 
+  SoftskillApi, 
+  CuriosidadeApi 
+} from '@/types/curriculo'
 
-function App() {
+const API_BASE_URL = 'http://localhost:8080/api'
+
+function ResumeContent() {
   const [curriculo, setCurriculo] = useState<Curriculo | null>(null)
+  const [dadosApi, setDadosApi] = useState<DadosApi | null>(null)
   const [loading, setLoading] = useState(true)
   const [erro, setErro] = useState<string | null>(null)
   const [isDark, setIsDark] = useState(false)
+  const { language } = useLanguage()
 
   useEffect(() => {
-    carregarCurriculo()
+    carregarDadosApi()
   }, [])
 
-  async function carregarCurriculo() {
+  // Remonta o currículo quando o idioma muda
+  useEffect(() => {
+    if (dadosApi) {
+      const curriculoCompleto = montarCurriculo(dadosApi, language)
+      setCurriculo(curriculoCompleto)
+    }
+  }, [language, dadosApi])
+
+  async function carregarDadosApi() {
     setLoading(true)
     setErro(null)
 
     try {
-      // Busca apenas as experiências do backend (único dado disponível por enquanto)
-      const response = await fetch('http://localhost:5047/api/Curriculo')
+      // Busca todos os dados em paralelo de múltiplos endpoints
+      const [
+        experienciasRes,
+        informacoesRes,
+        hardskillsRes,
+        softskillsRes,
+        curiosidadesRes
+      ] = await Promise.all([
+        fetch(`${API_BASE_URL}/Experiencias`),
+        fetch(`${API_BASE_URL}/InformacoesPessoais`),
+        fetch(`${API_BASE_URL}/Hardskills`),
+        fetch(`${API_BASE_URL}/Softskills`),
+        fetch(`${API_BASE_URL}/Curiosidades`)
+      ])
 
-      if (!response.ok) {
-        throw new Error(`Erro HTTP: ${response.status}`)
+      // Verifica se as respostas principais foram bem-sucedidas
+      if (!experienciasRes.ok) {
+        throw new Error(`Erro ao buscar experiências: ${experienciasRes.status}`)
       }
 
-      const experienciasApi = await response.json()
+      // Processa as respostas (algumas podem falhar sem quebrar tudo)
+      const experiencias: ExperienciaApi[] = await experienciasRes.json()
+      const informacoesPessoais: InformacaoPessoalApi | null = informacoesRes.ok 
+        ? await informacoesRes.json() 
+        : null
+      const hardskills: HardskillApi[] = hardskillsRes.ok 
+        ? await hardskillsRes.json() 
+        : []
+      const softskills: SoftskillApi[] = softskillsRes.ok 
+        ? await softskillsRes.json() 
+        : []
+      const curiosidades: CuriosidadeApi[] = curiosidadesRes.ok 
+        ? await curiosidadesRes.json() 
+        : []
+
+      // Agrupa todos os dados da API
+      const dados: DadosApi = {
+        experiencias,
+        informacoesPessoais,
+        hardskills,
+        softskills,
+        curiosidades
+      }
       
-      // Monta o currículo completo mesclando dados da API com dados mockados
-      const curriculoCompleto = montarCurriculo(experienciasApi)
+      // Salva os dados da API e monta o currículo
+      setDadosApi(dados)
+      const curriculoCompleto = montarCurriculo(dados, language)
       setCurriculo(curriculoCompleto)
     } catch (error: any) {
       console.error(error)
@@ -76,7 +132,7 @@ function App() {
         <Card className="max-w-md">
           <CardContent className="pt-6">
             <p className="text-red-500 text-center mb-4">{erro}</p>
-            <Button onClick={carregarCurriculo} className="w-full">
+            <Button onClick={carregarDadosApi} className="w-full">
               Tentar Novamente
             </Button>
           </CardContent>
@@ -142,6 +198,14 @@ function App() {
         <p>Criado por Wendell Pereira @ LABORATÓRIO.CE. Todos os direitos reservados.</p>
       </footer>
     </div>
+  )
+}
+
+function App() {
+  return (
+    <LanguageProvider>
+      <ResumeContent />
+    </LanguageProvider>
   )
 }
 

@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Moon, Sun, Printer, IdCard } from 'lucide-react'
 import { SecretModal } from './SecretModal'
+import { LanguageSelector } from './LanguageSelector'
 import type { SecaoSecreta } from '@/types/curriculo'
 
 interface ControlBarProps {
@@ -18,24 +19,24 @@ export function ControlBar({ isDark, onToggleTheme, onPrint, secaoSecreta }: Con
                 V.2.0 | React + TS + Tailwind + Shadcn Ui
             </div>
 
-            <div className="flex gap-4">
-
-                <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={onToggleTheme}
-                    className="rounded-full"
-                >
-                    {isDark ? <Sun className="w-4 h-4 text-yellow-400" /> : <Moon className="w-4 h-4" />}
-                </Button>
+            <div className="flex gap-4 items-center">
+                <LanguageSelector />
 
                 <div className="flex gap-3 items-center">
                     <SecretModal secaoSecreta={secaoSecreta} />
 
-
                     <Button onClick={onPrint} className="bg-blue-600 hover:bg-blue-700">
                         <Printer className="w-4 h-4 mr-2" />
                         PDF / Imprimir
+                    </Button>
+
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={onToggleTheme}
+                        className="rounded-full"
+                    >
+                        {isDark ? <Sun className="w-4 h-4 text-yellow-400" /> : <Moon className="w-4 h-4" />}
                     </Button>
                 </div>
             </div>

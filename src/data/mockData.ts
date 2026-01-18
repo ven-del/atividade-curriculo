@@ -1,15 +1,20 @@
-import type { Curriculo, Educacao, Habilidade, Idioma, Contato, SecaoSecreta } from '@/types/curriculo'
+import type { 
+  Curriculo, 
+  Educacao, 
+  Habilidade, 
+  Idioma, 
+  Contato, 
+  SecaoSecreta,
+  ExperienciaApi,
+  InformacaoPessoalApi,
+  HardskillApi,
+  SoftskillApi,
+  CuriosidadeApi
+} from '@/types/curriculo'
+import type { Language } from '@/contexts/LanguageContext'
 
 // Dados mockados para informações que ainda não existem no backend
-// Apenas experiências vêm do backend por enquanto
-
-export const mockContato: Contato = {
-  email: 'rwendell.regis@gmail.com',
-  telefone: '+55 (85) 997-017-021',
-  linkedin: 'linkedin.com/in/ven-del',
-  github: 'github.com/ven-del',
-  localizacao: 'Fortaleza, CE'
-}
+// Educação e idiomas continuam mockados
 
 export const mockEducacao: Educacao[] = [
   {
@@ -35,71 +40,146 @@ export const mockEducacao: Educacao[] = [
   }
 ]
 
-export const mockHabilidades: Habilidade[] = [
-  // Hardskills
-  { id: 1, nome: 'Desenvolvimento Web', categoria: 'hard' },
-  { id: 2, nome: 'HTML, CSS, Javascript', categoria: 'hard' },
-  { id: 3, nome: 'React.js / Node.js / Express', categoria: 'hard' },
-  { id: 4, nome: 'Python / Django', categoria: 'hard' },
-  { id: 5, nome: 'Git / GitHub', categoria: 'hard' },
-  { id: 6, nome: 'SQL / MySQL / PostgreSQL', categoria: 'hard' },
-  { id: 7, nome: 'Linux Bash', categoria: 'hard' },
-  // Softskills
-  { id: 8, nome: 'Desenvolvimento Ágil', categoria: 'soft' },
-  { id: 9, nome: 'Scrum / Kanban', categoria: 'soft' },
-  { id: 10, nome: 'Resolução de Problemas', categoria: 'soft' },
-  { id: 11, nome: 'Resiliência', categoria: 'soft' },
-  { id: 12, nome: 'Trabalho em Equipe', categoria: 'soft' },
-  { id: 13, nome: 'Foco em Resultados', categoria: 'soft' }
-]
-
 export const mockIdiomas: Idioma[] = [
   { id: 1, nome: 'Português', nivel: 'Nativo', porcentagem: 100 },
   { id: 2, nome: 'Inglês', nivel: 'Fluente (C2)', porcentagem: 100 },
   { id: 3, nome: 'Espanhol', nivel: 'Avançado (C1)', porcentagem: 85 }
 ]
 
-export const mockSecaoSecreta: SecaoSecreta = {
-  titulo: 'Aôba! Bão?',
-  curiosidades: [
-    'Sou canhoto',
-    'Tenho uma guitarra própria para canhotos',
-    'Já ganhei uma competição de karate quando era criança, mas perdi a medalha',
-    'Já fui Top 3 em dano causado e Top 8 em velocidade de conclusão dos tanks do servidor Norte-Americano (Primal) no Final Fantasy XIV, na expansão Endwalker',
-    'Também já fui Top 25 de Ryan em PvP no saudoso Grand Chase',
-    'Amo jogos de luta, inclusive tenho um controle arcade pra jogar Street Fighter 6 e Tekken 8',
-    'Meu sonho é ser desenvolvedor de jogos e pretendo fazer um jogo por conta própria e upar na Steam. Já tenho lançado meu primeiro jogo oficial, é o Cosmic Wings',
-    'Tenho um Canal na Twitch, mas como o Pc não aguenta mais fazer lives, tá em hiato por um tempo'
-  ],
-  fotoUrl: '/assets/profile-picture.jpg',
-  citacao: '"A tecnologia move o mundo."'
-}
-
 export const mockPerfil = `Olá! Me chamo Wendell e sou apaixonado por tecnologia, jogos e programação. Nasci e cresci em Fortaleza, já trabalhei diretamente com o público antes de entrar na área da tecnologia, sendo líder de uma pequena equipe. Já como parte da TI, possuo 5 anos de experiência profissional como analista de sistemas, sendo os últimos dois diretamente como suporte. Também tive meu período de estágio no início de minha jornada na TI, onde atuei como help desk e fiz parte de um time de infraestrutura durante o ano de experiência. Amo aprender mais sobre programação e atualmente sou um aluno orgulhoso do Geração Tech 2.0.`
 
+// Dados base de fallback caso a API não retorne informações pessoais
 export const mockDadosBase = {
   nome: 'Wendell Pereira',
   titulo: 'Full Stack Developer',
   fotoUrl: 'https://avatars.githubusercontent.com/u/45856720?v=4'
 }
 
-// Função para montar o currículo completo mesclando dados da API com mock
-export function montarCurriculo(experienciasApi: any[]): Curriculo {
+// Dados de fallback para seção secreta
+export const mockSecaoSecretaBase = {
+  titulo: 'Aôba! Bão?',
+  fotoUrl: '/assets/profile-picture.jpg',
+  citacao: '"A tecnologia move o mundo."'
+}
+
+// Interface para os dados da API
+export interface DadosApi {
+  experiencias: ExperienciaApi[]
+  informacoesPessoais: InformacaoPessoalApi | null
+  hardskills: HardskillApi[]
+  softskills: SoftskillApi[]
+  curiosidades: CuriosidadeApi[]
+}
+
+// Função para converter hardskills da API para o formato interno
+function converterHardskills(hardskills: HardskillApi[]): Habilidade[] {
+  return hardskills.map(h => ({
+    id: h.id,
+    nome: h.nomeHardskill,
+    categoria: 'hard' as const
+  }))
+}
+
+// Função para converter softskills da API para o formato interno
+function converterSoftskills(softskills: SoftskillApi[], language: Language): Habilidade[] {
+  return softskills.map(s => ({
+    id: s.id + 1000, // Offset para evitar conflito de IDs
+    nome: language === 'en' ? s.nomeSoftskillEn : language === 'es' ? s.nomeSoftskillEs : s.nomeSoftskill,
+    categoria: 'soft' as const
+  }))
+}
+
+// Função para montar contato a partir das informações pessoais
+function montarContato(info: InformacaoPessoalApi | null): Contato {
+  if (!info) {
+    return {
+      email: 'rwendell.regis@gmail.com',
+      telefone: '+55 (85) 997-017-021',
+      linkedin: 'linkedin.com/in/ven-del',
+      github: 'github.com/ven-del',
+      localizacao: 'Fortaleza, CE'
+    }
+  }
   return {
-    ...mockDadosBase,
-    perfil: mockPerfil,
-    contato: mockContato,
-    experiencias: experienciasApi.map((exp, index) => ({
-      id: exp.id || index + 1,
-      cargo: exp.cargo,
+    email: info.email,
+    telefone: info.telefone,
+    linkedin: info.linkLinkedin.replace('https://', ''),
+    github: info.linkGitHub.replace('https://', ''),
+    localizacao: info.localizacao
+  }
+}
+
+// Função para montar a seção secreta com curiosidades da API
+function montarSecaoSecreta(curiosidades: CuriosidadeApi[], language: Language): SecaoSecreta {
+  return {
+    ...mockSecaoSecretaBase,
+    curiosidades: curiosidades.length > 0 
+      ? curiosidades.map(c => 
+          language === 'en' ? c.descricaoEn : language === 'es' ? c.descricaoEs : c.descricao
+        ) 
+      : [
+          'Sou canhoto',
+          'Tenho uma guitarra própria para canhotos',
+          'Já ganhei uma competição de karate quando era criança, mas perdi a medalha'
+        ]
+  }
+}
+
+// Função para obter a profissão traduzida
+function obterProfissaoTraduzida(info: InformacaoPessoalApi | null, language: Language): string {
+  if (!info) return mockDadosBase.titulo
+  
+  switch (language) {
+    case 'en':
+      return info.profissaoEn || info.profissao
+    case 'es':
+      return info.profissaoEs || info.profissao
+    default:
+      return info.profissao
+  }
+}
+
+// Função para obter a descrição/perfil traduzido
+function obterDescricaoTraduzida(info: InformacaoPessoalApi | null, language: Language): string {
+  if (!info) return mockPerfil
+  
+  switch (language) {
+    case 'en':
+      return info.descricaoEn || info.descricao || mockPerfil
+    case 'es':
+      return info.descricaoEs || info.descricao || mockPerfil
+    default:
+      return info.descricao || mockPerfil
+  }
+}
+
+// Função para montar o currículo completo mesclando dados da API com mock
+export function montarCurriculo(dados: DadosApi, language: Language = 'pt-br'): Curriculo {
+  const { experiencias, informacoesPessoais, hardskills, softskills, curiosidades } = dados
+  
+  // Mescla hardskills e softskills
+  const habilidadesConvertidas: Habilidade[] = [
+    ...converterHardskills(hardskills),
+    ...converterSoftskills(softskills, language)
+  ]
+
+  return {
+    nome: informacoesPessoais?.nomeCompleto ?? mockDadosBase.nome,
+    titulo: obterProfissaoTraduzida(informacoesPessoais, language),
+    fotoUrl: mockDadosBase.fotoUrl,
+    perfil: obterDescricaoTraduzida(informacoesPessoais, language),
+    contato: montarContato(informacoesPessoais),
+    experiencias: experiencias.map((exp) => ({
+      id: exp.id,
+      cargo: language === 'en' ? exp.cargoEn : language === 'es' ? exp.cargoEs : exp.cargo,
       empresa: exp.empresa,
       dataInicio: exp.dataInicio,
       dataFim: exp.dataFim,
-      descricao: exp.descricao
+      descricao: language === 'en' ? exp.descricaoEn : language === 'es' ? exp.descricaoEs : exp.descricao
     })),
     educacao: mockEducacao,
-    habilidades: mockHabilidades,
+    habilidades: habilidadesConvertidas,
     idiomas: mockIdiomas,
-    secaoSecreta: mockSecaoSecreta
+    secaoSecreta: montarSecaoSecreta(curiosidades, language)
   }
 }
